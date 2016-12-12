@@ -1,16 +1,12 @@
-$array = @("arw","jpg","mp4")
+$array = @(".arw",".jpg",".mp4")
 
-foreach ($i in $array) {
-   Write-Host $i 
-}
-
-$number = (Get-ChildItem "*.*").Length
-Write-Host $number
-foreach ($i in Get-ChildItem "*.*") {
-    $name = (Get-ChildItem $i).BaseName
-    $date = (Get-ChildItem $i).CreationTime
-    $out_date = $date.Year.ToString() + $date.Month.ToString() + $date.Day.ToString()
-    $out_time = $date.Hour.ToString() + $date.Minute.ToString() + $date.Second.ToString()
-    $out = $out_date + "__" + $out_time + "__" + $name 
-    Write-Host $out   
+foreach ($extension in $array) {
+  foreach ($candidate in Get-ChildItem ("*" + $extension)) {
+    $original_name = $candidate.BaseName
+    $date = (Get-ChildItem $candidate).CreationTime
+    $created_date = $date.Year.ToString("0000") + $date.Month.ToString("00") + ($date.Day).ToString("00")
+    $created_time = $date.Hour.ToString("00") + $date.Minute.ToString("00") + $date.Second.ToString("00")
+    $new_name = $created_date + "_" + $created_time + "_" + $original_name + $extension 
+    Write-Host "Copy-Item", $candidate, $new_name
+  }
 }

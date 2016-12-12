@@ -24,7 +24,8 @@ args = parser.parse_args()
 
 # Check the command line option --debug-target
 if args.verbose is True:
-    print("fdsfdsf {pwd}".format(pwd=os.path.dirname("..")))
+    print("be verbose")
+    
 
 # def create_dir(filepath):
 #     """ ewrewr er erewr w"""
