@@ -1,5 +1,10 @@
 $array = @(".arw",".jpg",".mp4")
 
+# THINGS TO do 
+# +++ Avoid multiple renames (if file name with new format exists, skip file)
+# +++ something like --dry-run
+# +++ How to handle xmp or dop files?
+
 foreach ($extension in $array) {
   foreach ($candidate in Get-ChildItem ("*" + $extension)) {
     $original_name = $candidate.BaseName
