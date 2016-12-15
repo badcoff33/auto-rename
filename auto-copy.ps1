@@ -5,11 +5,16 @@ Add-Type -AssemblyName System.Windows.Forms
 $FolderBrowser = New-Object System.Windows.Forms.FolderBrowserDialog -Property @{
     ShowNewFolderButton = $true
 }
-[void]$FolderBrowser.ShowDialog() 
-$destination_dir = $FolderBrowser.SelectedPath
-
-if ($destination_dir -eq $null) {
+$button_pressed = $FolderBrowser.ShowDialog() 
+Write-Host $button_pressed
+if ($button_pressed -eq "Cancel") {
   exit
+}
+
+if ($FolderBrowser.SelectedPath -eq $null) {
+  exit
+} else {
+  $destination_dir = $FolderBrowser.SelectedPath
 }
 
 foreach ($source_dir in $look_up_dirs) {
