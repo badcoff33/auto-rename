@@ -3,12 +3,11 @@ $look_up_dirs = @("e:\", "f:\")
 
 Add-Type -AssemblyName System.Windows.Forms
 $FolderBrowser = New-Object System.Windows.Forms.FolderBrowserDialog -Property @{
-    ShowNewFolderButton = $false
+    ShowNewFolderButton = $true
 }
 [void]$FolderBrowser.ShowDialog() 
 $destination_dir = $FolderBrowser.SelectedPath
 
-#if ((Test-Path -Path $destination_dir) -eq $true) {
 if ($destination_dir -eq $null) {
   exit
 }
@@ -16,7 +15,9 @@ if ($destination_dir -eq $null) {
 foreach ($source_dir in $look_up_dirs) {
   if (Test-Path -Path $source_dir) {
     foreach ($extension in $file_extensions)  {
-      $file_extensions = Get-ChildItem -Recurse -Path ($source_dir + "\DSC*" + $extension)
+      Write-Host -NoNewline "Looking for", $extension, "files on path", $source_dir , ": "
+      $file_matches = Get-ChildItem -Recurse -Path ($source_dir + "\DSC*" + $extension)
+      Write-Host "found", $file_matches.length, "files"
       foreach ($candidate in $file_matches) {
         # Do the rename
         $original_name = $candidate.BaseName
