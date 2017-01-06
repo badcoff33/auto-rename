@@ -1,4 +1,8 @@
-Ôªøfunction RetriveImageFileData ($imagePath) {
+
+# $sourcePath = "C:\Users\Markus\Sources\GitHub\auto-rename\testfiles"
+$sourcePath = "F:\DCIM"
+
+function RetriveImageFileData ($imagePath) {
 <# 
     .DESCRIPTION
     Retrive the absolute path and date, when image was taken. 
@@ -7,8 +11,8 @@
     .PARAMETER imagePath
     Path to look up for image files
 #>
-    $objShell¬†=¬†New-Object¬†-ComObject¬†Shell.Application¬†    
-    $objFolder¬†=¬†$objShell.namespace($imagePath)
+    $objShell†=†New-Object†-ComObject†Shell.Application†    
+    $objFolder†=†$objShell.namespace($imagePath)
 
     $folderItems = $objFolder.Items()
     $folderItemsCount = $objFolder.Items().Count
@@ -27,12 +31,19 @@
     return $localImageData
 }
 
+if ((Test-Path -Path $sourcePath) -eq $true) {
+    Write-Host "Quellpfad", $sourcePath, "gefunden."
+} else {
+    Write-Host "Quellpfad", $sourcePath, "nicht gefunden."
+    return
+}
+
 $nameOfImport = Read-Host 'Name des Bildimports'
 $targetPath = "C:\Users\Markus\Documents\RAW\"+ (Get-Date -Format yyyy-MM-dd) + "-" + $nameOfImport + "\"
 
 Write-Host "Testing ", $targetPath , "...", (Test-Path $targetPath)
 if ((Test-Path -Path $targetPath) -eq $true) {
-    Write-Host "Name f√ºr Bildimport besteht bereits"
+    Write-Host "Name f¸r Bildimport besteht bereits"
     return
 } else {
     New-Item -ItemType Directory -Path $targetPath
@@ -40,7 +51,7 @@ if ((Test-Path -Path $targetPath) -eq $true) {
 
 
 $hashTableImages = @{}
-foreach ($subPath in (Get-ChildItem -Recurse -Directory -Path "C:\Users\Markus\Sources\GitHub\auto-rename\testfiles")) {
+foreach ($subPath in (Get-ChildItem -Recurse -Directory -Path $sourcePath)) {
     Write-Host "Search in", $subPath.FullName, "..."
     $collectedImageData = RetriveImageFileData($subPath.FullName)
     $hashTableImages = $hashTableImages + $collectedImageData
@@ -49,7 +60,7 @@ foreach ($subPath in (Get-ChildItem -Recurse -Directory -Path "C:\Users\Markus\S
 foreach ($file in $hashTableImages.Keys) {
     $fileItem = Get-ChildItem $file
     if ($fileItem.Extension -eq ".arw") {
-        # has localization specific format DD.‚ÄéMM.‚ÄéYYYY ‚Äè‚Äéhh:mm
+        # has localization specific format DD.?MM.?YYYY ??hh:mm
         $dateTimeString = [string]::new($hashTableImages.Get_Item($file))
         # Use .NET accelerator regex
         $m = [regex]::Match($dateTimeString, "([0-9]{2}).*([0-9]{2}).*([0-9]{4}).*([0-9]{2}).*([0-9]{2})")
