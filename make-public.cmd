@@ -1,0 +1,1 @@
+@copy Rename-Images.ps1 %USERPROFILE%\Scripts\Rename-Images.ps1

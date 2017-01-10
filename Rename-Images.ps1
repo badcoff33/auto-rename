@@ -48,6 +48,6 @@ foreach ($file in $hashTableImages.Keys) {
     $day   = $m.Groups[1].Captures.Value
     $hhmm  = $m.Groups[4].Captures.Value + $m.Groups[5].Captures.Value
     $outstring = [string]::Concat($year, "-", $month, "-", $day, "_", $hhmm, "_",$fileItem.BaseName, $fileItem.Extension) 
-    Write-Host "...", $outstring 
-    Move-Item -Path $file -Destination ($imagePath + $outstring)
+    Write-Host "   ", $outstring 
+    Move-Item -Path $file -Destination ($imagePath + "\" + $outstring)
 }
